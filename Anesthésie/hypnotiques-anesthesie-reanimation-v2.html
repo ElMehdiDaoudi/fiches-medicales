@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Hypnotiques en Anesthésie-Réanimation — Fiche de révision</title>
+<style>
+:root{
+  --pink:#F72585; --purple:#7209B7; --purple-dark:#3A0CA3; --blue:#4361EE; --cyan:#4CC9F0;
+  --pink-light:#FDE7F2; --purple-light:#F0E6F7; --purple-dark-light:#EAE7F7;
+  --blue-light:#E9EDFF; --cyan-light:#E6F8FD;
+  --white:#FFFFFF; --text:#211A2B; --muted:#6B6470; --border:#DDD9E2; --background:#F7F6F9;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;}
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+body{margin:0;background:var(--background);color:var(--text);font-family:Arial,Helvetica,sans-serif;font-size:14.5px;line-height:1.4;}
+.container{width:min(1300px,94%);margin:auto;padding-bottom:28px;}
+
+.header{background:var(--purple-dark);color:var(--white);border-radius:0 0 14px 14px;padding:20px 18px 16px;margin-bottom:16px;text-align:center;}
+.header h1{margin:0 0 4px;font-size:1.5rem;letter-spacing:.3px;}
+.header p{margin:0;color:var(--cyan-light);font-size:.88rem;font-weight:600;}
+
+.section{margin-bottom:18px;}
+.section-title{display:flex;align-items:center;gap:8px;font-size:1rem;font-weight:800;color:var(--purple-dark);margin:0 0 8px;text-transform:uppercase;letter-spacing:.3px;}
+
+.essentiel{background:var(--purple-dark-light);border:1px solid var(--purple);border-radius:10px;padding:14px 16px;}
+.essentiel ul{margin:0;padding-left:0;list-style:none;}
+.essentiel li{margin:4px 0;font-weight:600;}
+.essentiel li::before{content:"→ ";color:var(--purple-dark);font-weight:900;}
+
+.table-wrapper{overflow-x:auto;background:var(--white);border:1px solid var(--border);border-radius:10px;}
+table{width:100%;border-collapse:collapse;min-width:600px;}
+th{background:var(--blue-light);color:var(--purple-dark);font-size:.72rem;text-transform:uppercase;text-align:left;padding:8px 10px;border-bottom:2px solid var(--blue);white-space:nowrap;}
+td{padding:7px 10px;border-bottom:1px solid var(--border);vertical-align:top;font-size:.86rem;}
+tr:last-child td{border-bottom:none;}
+td strong{color:var(--blue);}
+
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;}
+.card{background:var(--white);border:1px solid var(--border);border-left:5px solid var(--blue);border-radius:10px;padding:12px 14px;}
+.card h3{margin:0 0 2px;font-size:1rem;color:var(--purple-dark);}
+.card .sub{font-size:.74rem;color:var(--muted);margin-bottom:6px;}
+.badges{margin-bottom:6px;}
+.badge{display:inline-block;font-size:.65rem;font-weight:700;background:var(--purple-light);color:var(--purple);border-radius:20px;padding:2px 8px;margin:0 4px 4px 0;}
+.card table{min-width:0;}
+.card th{background:transparent;border-bottom:1px solid var(--border);color:var(--muted);padding:4px 6px;}
+.card td{padding:4px 6px;font-size:.8rem;}
+.card-alert{margin-top:8px;background:var(--pink-light);border-left:3px solid var(--pink);border-radius:6px;padding:6px 9px;font-size:.78rem;color:var(--text);}
+.card-alert b{color:var(--pink);}
+
+.algo{background:var(--cyan-light);border:1px solid var(--cyan);border-radius:10px;padding:14px 16px;font-size:.86rem;}
+.algo-step{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:7px 12px;margin:4px 0;font-weight:700;text-align:center;}
+.algo-arrow{text-align:center;color:var(--purple-dark);font-weight:900;margin:2px 0;}
+.algo-branch{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 0;}
+.algo-branch .opt{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:8px 10px;}
+.algo-branch .opt .lbl{font-weight:800;color:var(--purple);font-size:.72rem;text-transform:uppercase;margin-bottom:3px;}
+
+.redflags{background:var(--pink-light);border:1px solid var(--pink);border-radius:10px;padding:14px 16px;}
+.redflags .section-title{color:var(--pink);}
+.redflags ul{margin:0;padding-left:0;list-style:none;}
+.redflags li{margin:5px 0;font-weight:600;}
+.redflags li::before{content:"🚨 ";}
+
+.traps{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px;}
+.trap{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:.83rem;}
+.trap .ko{color:var(--pink);font-weight:700;}
+.trap .ok{color:var(--purple);font-weight:700;}
+
+.numbers{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;}
+.numcard{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:10px 12px;text-align:center;}
+.numcard .big{font-size:1.15rem;font-weight:900;color:var(--purple-dark);}
+.numcard .lbl{font-size:.72rem;color:var(--muted);margin-top:2px;}
+
+.keymsg{background:var(--purple-dark);color:var(--white);border-radius:10px;padding:14px 16px;}
+.keymsg .section-title{color:var(--cyan-light);}
+.keymsg ul{margin:0;padding-left:0;list-style:none;}
+.keymsg li{margin:5px 0;font-weight:600;}
+.keymsg li::before{content:"→ ";color:var(--cyan);font-weight:900;}
+
+.refs{font-size:.74rem;color:var(--muted);border-top:1px solid var(--border);padding-top:8px;}
+
+@media (max-width:768px){
+  .container{width:94%;}
+  .card-grid{grid-template-columns:1fr;}
+  .algo-branch{grid-template-columns:1fr;}
+  .traps{grid-template-columns:1fr;}
+  .header h1{font-size:1.25rem;}
+}
+</style>
+</head>
+<body>
+<main class="container">
+
+<div class="header">
+  <h1>💉 HYPNOTIQUES EN ANESTHÉSIE-RÉANIMATION</h1>
+  <p>Mécanismes · indications · posologies adulte &amp; enfant</p>
+</div>
+
+<div class="section essentiel">
+  <div class="section-title">🧠 ESSENTIEL</div>
+  <ul>
+    <li>6 hypnotiques de référence : propofol, étomidate, kétamine, midazolam, thiopental, dexmédétomidine</li>
+    <li>Toujours titrer selon la réponse clinique, jamais de dose "fixe" en pratique</li>
+    <li>Patient instable/choc → privilégier étomidate ou kétamine (stabilité hémodynamique)</li>
+    <li>Propofol = référence entretien AG et sédation USI courte, mais dépresseur cardiovasculaire</li>
+    <li>Dexmédétomidine = seule sédation USI sans dépression respiratoire</li>
+    <li>Kétamine toujours associée à une benzodiazépine pour limiter les effets psychodysleptiques</li>
+  </ul>
+</div>
+
+<div class="section">
+  <div class="section-title">📊 TABLEAU COMPARATIF</div>
+  <div class="table-wrapper">
+  <table>
+  <tr><th>Agent</th><th>Délai d'action</th><th>Durée</th><th>Effet hémodynamique</th><th>Indication phare</th></tr>
+  <tr><td><strong>Propofol</strong></td><td>~30 s</td><td>5–10 min</td><td>↓↓ PA (vasoplégie)</td><td>Induction/entretien AG, AIVOC</td></tr>
+  <tr><td><strong>Étomidate</strong></td><td>~30–60 s</td><td>4–6 min</td><td>Stable (peu d'effet)</td><td>Patient instable, ISR</td></tr>
+  <tr><td><strong>Kétamine</strong></td><td>~30–60 s (IV)</td><td>10–15 min</td><td>↑ FC / ↑ PA</td><td>Choc, brûlé, ISR</td></tr>
+  <tr><td><strong>Midazolam</strong></td><td>1–2 min</td><td>15–80 min</td><td>Modérément ↓ PA</td><td>Prémédication, co-induction, sédation</td></tr>
+  <tr><td><strong>Thiopental</strong></td><td>~30–40 s</td><td>6–8 min</td><td>↓↓ PA marquée</td><td>État de mal épileptique, neuroprotection</td></tr>
+  <tr><td><strong>Dexmédétomidine</strong></td><td>~30–60 min (perfusion)</td><td>Dépend perfusion</td><td>Bradycardie / ↓ PA</td><td>Sédation USI coopérative (RASS 0/−3)</td></tr>
+  </table>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">💊 FICHES POSOLOGIQUES PAR AGENT</div>
+  <div class="card-grid">
+
+    <div class="card">
+      <h3>Propofol</h3>
+      <div class="sub">Agoniste GABA-A — hypnotique pur, courte durée</div>
+      <div class="badges"><span class="badge">Induction AG</span><span class="badge">Entretien AG</span><span class="badge">Sédation USI</span></div>
+      <table>
+      <tr><th>Usage</th><th>Adulte</th><th>Enfant (&gt;1 mois)</th></tr>
+      <tr><td>Induction</td><td>1,5–2,5 mg/kg IV</td><td>2,5 mg/kg (&gt;8 ans) ; 2,5–4 mg/kg (1 mois–3 ans)</td></tr>
+      <tr><td>Entretien</td><td>4–12 mg/kg/h</td><td>1,5–9 mg/kg/h</td></tr>
+      <tr><td>Sédation USI</td><td>0,3–4 mg/kg/h</td><td>Non recommandé 1<sup>re</sup> intention</td></tr>
+      </table>
+      <div class="card-alert"><b>⚠️</b> Réduire 25–50 % si âgé/ASA III-IV/hypovolémique. CI induction &lt;1 mois.</div>
+    </div>
+
+    <div class="card">
+      <h3>Étomidate</h3>
+      <div class="sub">Agoniste GABA-A — stabilité hémodynamique</div>
+      <div class="badges"><span class="badge">Induction AG</span><span class="badge">Patient instable</span><span class="badge">ISR</span></div>
+      <table>
+      <tr><th>Usage</th><th>Adulte</th><th>Enfant (&gt;2 ans)</th></tr>
+      <tr><td>Induction</td><td>0,2–0,3 mg/kg (max 0,6)</td><td>0,2–0,4 mg/kg</td></tr>
+      <tr><td>ISR urgence</td><td>0,15–0,3 mg/kg</td><td>0,2–0,3 mg/kg</td></tr>
+      </table>
+      <div class="card-alert"><b>⚠️</b> Insuffisance surrénalienne transitoire → jamais en perfusion continue. Myoclonies fréquentes.</div>
+    </div>
+
+    <div class="card">
+      <h3>Kétamine</h3>
+      <div class="sub">Antagoniste NMDA — anesthésie dissociative, analgésique</div>
+      <div class="badges"><span class="badge">Induction AG</span><span class="badge">Choc/brûlé</span><span class="badge">Analgésie</span><span class="badge">Prémédication</span></div>
+      <table>
+      <tr><th>Usage</th><th>Adulte</th><th>Enfant</th></tr>
+      <tr><td>Induction IV</td><td>1–2 mg/kg (jusqu'à 4,5)</td><td>2 mg/kg (3–4 si &lt;4 ans)</td></tr>
+      <tr><td>Induction IM</td><td>4–10 mg/kg</td><td>4–5 mg/kg</td></tr>
+      <tr><td>Analgésie</td><td>0,1–0,3 mg/kg puis 0,1–0,4 mg/kg/h</td><td>0,1–0,25 mg/kg</td></tr>
+      <tr><td>Prémédication</td><td>—</td><td>PO 6 mg/kg ; IM 4–5 ; IN 3–5</td></tr>
+      </table>
+      <div class="card-alert"><b>⚠️</b> Toujours associer benzodiazépine. Prudence coronarien, HTIC non ventilé.</div>
+    </div>
+
+    <div class="card">
+      <h3>Midazolam</h3>
+      <div class="sub">Benzodiazépine — anxiolyse, amnésie, sédation</div>
+      <div class="badges"><span class="badge">Prémédication</span><span class="badge">Co-induction</span><span class="badge">Sédation USI</span><span class="badge">EME</span></div>
+      <table>
+      <tr><th>Usage</th><th>Adulte</th><th>Enfant</th></tr>
+      <tr><td>Prémédication IV</td><td>0,07–0,1 mg/kg</td><td>0,05–0,1 mg/kg</td></tr>
+      <tr><td>Prémédication rectale</td><td>—</td><td>0,3–0,5 mg/kg</td></tr>
+      <tr><td>Induction</td><td>0,15–0,35 mg/kg</td><td>0,2–0,3 mg/kg</td></tr>
+      <tr><td>Sédation USI</td><td>0,03–0,2 mg/kg/h</td><td>0,03–0,2 mg/kg/h</td></tr>
+      </table>
+      <div class="card-alert"><b>⚠️</b> Demi-vie ↑↑ en réanimation (accumulation métabolite actif, IR sévère).</div>
+    </div>
+
+    <div class="card">
+      <h3>Thiopental</h3>
+      <div class="sub">Barbiturique — action ultra-brève, anticonvulsivant</div>
+      <div class="badges"><span class="badge">Induction AG</span><span class="badge">État de mal épileptique</span><span class="badge">Neuroprotection</span></div>
+      <table>
+      <tr><th>Usage</th><th>Adulte</th><th>Enfant</th></tr>
+      <tr><td>Induction</td><td>3–5 mg/kg IV lent</td><td>4–8 mg/kg</td></tr>
+      <tr><td>Entretien/réa.</td><td>15–30 mg/kg/24h</td><td>Réinjections selon poids</td></tr>
+      </table>
+      <div class="card-alert"><b>⚠️</b> Voie IV stricte (nécrose si extravasation). Dépression CV marquée.</div>
+    </div>
+
+    <div class="card">
+      <h3>Dexmédétomidine</h3>
+      <div class="sub">Agoniste α2-adrénergique — sédation « coopérative »</div>
+      <div class="badges"><span class="badge">Sédation USI</span><span class="badge">Adjuvant AG</span><span class="badge">Sédation enfant (hors AMM)</span></div>
+      <table>
+      <tr><th>Usage</th><th>Adulte</th><th>Enfant</th></tr>
+      <tr><td>Charge USI</td><td>0,7 µg/kg/h (optionnelle)</td><td>Non systématique</td></tr>
+      <tr><td>Entretien USI</td><td>0,2–1,4 µg/kg/h</td><td>0,2–1 µg/kg/h (hors AMM)</td></tr>
+      <tr><td>Sédation IN</td><td>—</td><td>2–4 µg/kg</td></tr>
+      </table>
+      <div class="card-alert"><b>⚠️</b> Bradycardie/hypotension fréquentes, surtout en bolus. Prudence bloc AV.</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section algo">
+  <div class="section-title">🧭 CHOIX DE L'HYPNOTIQUE SELON LE TERRAIN</div>
+  <div class="algo-step">Nécessité d'une induction/sédation</div>
+  <div class="algo-arrow">↓</div>
+  <div class="algo-step">Patient hémodynamiquement stable ?</div>
+  <div class="algo-branch">
+    <div class="opt"><div class="lbl">Oui</div>Propofol (± midazolam en co-induction)</div>
+    <div class="opt"><div class="lbl">Non / choc</div>Étomidate ou kétamine</div>
+  </div>
+  <div class="algo-arrow">↓</div>
+  <div class="algo-step">Contexte spécifique ?</div>
+  <div class="algo-branch">
+    <div class="opt"><div class="lbl">État de mal épileptique</div>Thiopental ou midazolam</div>
+    <div class="opt"><div class="lbl">Sédation USI prolongée</div>Propofol, midazolam ou dexmédétomidine</div>
+  </div>
+</div>
+
+<div class="section redflags">
+  <div class="section-title">🚨 RED FLAGS</div>
+  <ul>
+    <li>Propofol chez nourrisson &lt;1 mois en induction → contre-indiqué (AMM)</li>
+    <li>Étomidate en perfusion continue ou injections répétées → insuffisance surrénalienne</li>
+    <li>Kétamine sans benzodiazépine → agitation/hallucinations sévères au réveil</li>
+    <li>Thiopental en extravasation → nécrose tissulaire, injection IV stricte impérative</li>
+    <li>Dexmédétomidine en bolus rapide → bradycardie/arrêt cardiaque décrits en surdosage</li>
+    <li>Midazolam en insuffisance rénale sévère → sédation prolongée par accumulation</li>
+  </ul>
+</div>
+
+<div class="section">
+  <div class="section-title">⚠️ PIÈGES À ÉVITER</div>
+  <div class="traps">
+    <div class="trap"><span class="ko">❌</span> Utiliser étomidate en perfusion prolongée pour "simplifier" la sédation<br><span class="ok">✔</span> Réservé à la dose unique d'induction</div>
+    <div class="trap"><span class="ko">❌</span> Penser que la kétamine est un simple sédatif<br><span class="ok">✔</span> C'est un anesthésique dissociatif + analgésique, pas un hypnotique "pur"</div>
+    <div class="trap"><span class="ko">❌</span> Confondre dose d'induction et dose de sédation continue<br><span class="ok">✔</span> Les posologies mg/kg (bolus) et mg/kg/h (perfusion) ne sont pas interchangeables</div>
+    <div class="trap"><span class="ko">❌</span> Négliger la réduction de dose chez le sujet âgé/ASA III-IV<br><span class="ok">✔</span> Réduction systématique 25–50 % pour la majorité des agents</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">🔢 CHIFFRES CLÉS</div>
+  <div class="numbers">
+    <div class="numcard"><div class="big">1,5–2,5</div><div class="lbl">mg/kg propofol induction adulte</div></div>
+    <div class="numcard"><div class="big">0,2–0,3</div><div class="lbl">mg/kg étomidate induction</div></div>
+    <div class="numcard"><div class="big">1–2</div><div class="lbl">mg/kg kétamine induction IV</div></div>
+    <div class="numcard"><div class="big">0,2–1,4</div><div class="lbl">µg/kg/h dexmédétomidine USI</div></div>
+    <div class="numcard"><div class="big">3–5</div><div class="lbl">mg/kg thiopental induction adulte</div></div>
+    <div class="numcard"><div class="big">0,15–0,35</div><div class="lbl">mg/kg midazolam induction</div></div>
+  </div>
+</div>
+
+<div class="section keymsg">
+  <div class="section-title">🧠 KEY MESSAGES</div>
+  <ul>
+    <li>Le choix de l'hypnotique dépend avant tout du terrain hémodynamique, pas seulement de l'indication</li>
+    <li>Toute dose doit être titrée à l'effet clinique, jamais administrée "en aveugle"</li>
+    <li>Kétamine et étomidate = agents de choix en situation d'instabilité/urgence</li>
+    <li>Dexmédétomidine se distingue par l'absence de dépression respiratoire</li>
+    <li>Vérifier systématiquement le RCP/protocole local avant administration</li>
+  </ul>
+</div>
+
+<div class="section refs">
+  📚 Sources : RCP/BDPM ANSM (propofol, étomidate, kétamine, midazolam, thiopental, dexmédétomidine) ; littérature SFAR. Fiche à visée éducative, ne remplace pas le jugement clinique ni le protocole institutionnel.
+</div>
+
+</main>
+</body>
+</html>
