@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MedCourses — Bibliothèque de révision</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#3A0CA3">
+<link rel="icon" href="icons/logo.svg" type="image/svg+xml">
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MedCourses">
+<style>
+  :root {
+    --pink: #F72585;
+    --purple: #7209B7;
+    --purple-dark: #3A0CA3;
+    --blue: #4361EE;
+    --cyan: #4CC9F0;
+
+    --pink-light: #FDE7F2;
+    --purple-light: #F0E6F7;
+    --purple-dark-light: #EAE7F7;
+    --blue-light: #E9EDFF;
+    --cyan-light: #E6F8FD;
+
+    --surface: #FFFFFF;
+    --text: #211A2B;
+    --muted: #6B6470;
+    --border: #DDD9E2;
+    --background: #F7F6F9;
+
+    --radius: 14px;
+    --serif: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  :root[data-theme="dark"] {
+    --surface: #1C1726;
+    --text: #ECE9F2;
+    --muted: #9B93AA;
+    --border: #34293F;
+    --background: #120D1A;
+
+    --pink-light: #3A1330;
+    --purple-light: #2A1740;
+    --purple-dark-light: #201A3A;
+    --blue-light: #1A1E3A;
+    --cyan-light: #123640;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--background);
+    color: var(--text);
+    font-family: var(--sans);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body { min-height: 100vh; padding-bottom: 3rem; }
+
+  header.top {
+    background: linear-gradient(135deg, var(--purple-dark) 0%, var(--purple) 55%, var(--blue) 100%);
+    color: #fff;
+    padding: 2.2rem 1.25rem 3.5rem;
+    position: relative;
+  }
+
+  .top-inner { max-width: 900px; margin: 0 auto; }
+
+  .brand-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--serif);
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+
+  .brand img { width: 30px; height: 30px; border-radius: 8px; display: block; }
+
+  .theme-toggle {
+    background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,255,255,0.28);
+    color: #fff;
+    border-radius: 999px;
+    width: 44px;
+    height: 44px;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  h1.headline {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: clamp(1.6rem, 5vw, 2.3rem);
+    margin: 1.3rem 0 0.3rem;
+  }
+
+  p.sub {
+    margin: 0 0 1.4rem;
+    color: rgba(255,255,255,0.85);
+    font-size: 0.98rem;
+  }
+
+  .search-wrap {
+    position: relative;
+  }
+
+  .search-wrap input {
+    width: 100%;
+    padding: 0.95rem 1.1rem 0.95rem 2.7rem;
+    border-radius: 12px;
+    border: none;
+    font-size: 1rem;
+    background: var(--surface);
+    color: var(--text);
+    outline: none;
+  }
+
+  .search-wrap .icon {
+    position: absolute;
+    left: 0.95rem;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.55;
+    font-size: 1.05rem;
+  }
+
+  main {
+    max-width: 900px;
+    margin: -2.2rem auto 0;
+    padding: 0 1.1rem;
+  }
+
+  .panel {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    box-shadow: 0 12px 30px -18px rgba(33, 26, 43, 0.35);
+    padding: 1.1rem;
+  }
+
+  nav.crumbs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.92rem;
+    color: var(--muted);
+    margin-bottom: 0.9rem;
+  }
+
+  nav.crumbs button {
+    background: none;
+    border: none;
+    color: var(--purple-dark);
+    font-weight: 600;
+    font-size: 0.92rem;
+    cursor: pointer;
+    padding: 0.2rem 0.15rem;
+  }
+
+  :root[data-theme="dark"] nav.crumbs button { color: var(--cyan); }
+
+  nav.crumbs button:last-child { color: var(--muted); font-weight: 400; cursor: default; }
+
+  nav.crumbs .sep { opacity: 0.5; }
+
+  section.section-label {
+    font-family: var(--serif);
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 0.2rem 0 0.9rem;
+    color: var(--purple-dark);
+  }
+
+  :root[data-theme="dark"] section.section-label { color: var(--cyan); }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem 0.9rem;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--background);
+    cursor: pointer;
+    text-align: left;
+    color: inherit;
+    text-decoration: none;
+    min-height: 88px;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+
+  .card:active { transform: scale(0.98); }
+
+  @media (hover: hover) {
+    .card:hover {
+      box-shadow: 0 8px 18px -12px rgba(33,26,43,0.4);
+      border-color: var(--purple);
+    }
+  }
+
+  .card .ic { font-size: 1.5rem; }
+
+  .card.folder { background: var(--purple-dark-light); }
+  .card.file { background: var(--blue-light); }
+
+  .card .name {
+    font-weight: 600;
+    font-size: 0.96rem;
+    line-height: 1.25;
+  }
+
+  .card .meta {
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  .empty, .error, .loading {
+    padding: 2.5rem 1rem;
+    text-align: center;
+    color: var(--muted);
+  }
+
+  .error { color: var(--pink); }
+
+  .error button, .retry-btn {
+    margin-top: 0.9rem;
+    background: var(--purple-dark);
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+
+  .results-list { display: flex; flex-direction: column; gap: 0.5rem; }
+
+  .result-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.85rem 0.9rem;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--background);
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .result-item .ic { font-size: 1.3rem; }
+
+  .result-item .rname { font-weight: 600; font-size: 0.94rem; }
+  .result-item .rpath { font-size: 0.78rem; color: var(--muted); }
+
+  footer.hint {
+    max-width: 900px;
+    margin: 1.4rem auto 0;
+    padding: 0 1.1rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  @media (max-width: 480px) {
+    header.top { padding: 1.6rem 1rem 3rem; }
+    .grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="brand-row">
+      <div class="brand"><img src="icons/logo.svg" alt=""> MedCourses</div>
+      <button class="theme-toggle" id="themeToggle" aria-label="Changer de thème">🌙</button>
+    </div>
+    <h1 class="headline">Bibliothèque de révision médicale</h1>
+    <p class="sub" id="subLine">Chargement du dépôt…</p>
+    <div class="search-wrap">
+      <span class="icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Rechercher un cours…" autocomplete="off">
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="panel">
+    <nav class="crumbs" id="crumbs"></nav>
+    <div id="content"><div class="loading">Chargement…</div></div>
+  </div>
+</main>
+
+<footer class="hint">Ajoutez des dossiers ou des fichiers HTML dans le dépôt GitHub — cette page les découvre automatiquement.</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---------- Theme ----------
+  var THEME_KEY = "medcourses-theme";
+  var toggleBtn = document.getElementById("themeToggle");
+  function applyTheme(theme) {
+    if (theme === "dark") {
+      document.documentElement.setAttribute("data-theme", "dark");
+      toggleBtn.textContent = "☀️";
+    } else {
+      document.documentElement.removeAttribute("data-theme");
+      toggleBtn.textContent = "🌙";
+    }
+  }
+  var savedTheme = localStorage.getItem(THEME_KEY) ||
+    (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  applyTheme(savedTheme);
+  toggleBtn.addEventListener("click", function () {
+    var current = document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+    var next = current === "dark" ? "light" : "dark";
+    localStorage.setItem(THEME_KEY, next);
+    applyTheme(next);
+  });
+
+  // ---------- Repo context ----------
+  function detectRepoContext() {
+    // Override for local testing: index.html?owner=USERNAME&repo=REPOSITORY
+    // Lets you run the page with a local server (or even file://) and still
+    // point it at a real, already-pushed GitHub repository.
+    var params = new URLSearchParams(window.location.search);
+    if (params.get("owner") && params.get("repo")) {
+      return { owner: params.get("owner"), repo: params.get("repo") };
+    }
+
+    var host = window.location.hostname;
+    var owner = host.split(".")[0];
+    var pathParts = window.location.pathname.split("/").filter(Boolean);
+    // On a project page (username.github.io/REPO/...), the first path segment is the repo name.
+    // On a user/org page (username.github.io), there is no repo segment in the path.
+    var repo = pathParts.length > 0 ? pathParts[0] : (owner + ".github.io");
+    return { owner: owner, repo: repo };
+  }
+
+  var ctx = detectRepoContext();
+  var subLine = document.getElementById("subLine");
+  var contentEl = document.getElementById("content");
+  var crumbsEl = document.getElementById("crumbs");
+  var searchInput = document.getElementById("searchInput");
+
+  var root = { name: "", path: "", type: "folder", children: {} };
+  var allFiles = []; // flat list for search
+  var currentPath = []; // array of path segments
+  var loaded = false;
+
+  // ---------- Fetch + build tree ----------
+  function loadRepository() {
+    contentEl.innerHTML = '<div class="loading">Chargement du dépôt ' + ctx.owner + '/' + ctx.repo + '…</div>';
+    fetch("https://api.github.com/repos/" + ctx.owner + "/" + ctx.repo)
+      .then(function (res) {
+        if (res.status === 404) throw { kind: "notfound" };
+        if (res.status === 403) throw { kind: "ratelimit" };
+        if (!res.ok) throw { kind: "generic", status: res.status };
+        return res.json();
+      })
+      .then(function (repoInfo) {
+        var branch = repoInfo.default_branch || "main";
+        return fetch("https://api.github.com/repos/" + ctx.owner + "/" + ctx.repo + "/git/trees/" + branch + "?recursive=1");
+      })
+      .then(function (res) {
+        if (res.status === 403) throw { kind: "ratelimit" };
+        if (!res.ok) throw { kind: "generic", status: res.status };
+        return res.json();
+      })
+      .then(function (treeData) {
+        var items = (treeData.tree || []).filter(function (item) {
+          return item.type === "blob" &&
+            /\.html?$/i.test(item.path) &&
+            item.path.toLowerCase() !== "index.html";
+        });
+        buildTree(items);
+        loaded = true;
+        subLine.textContent = allFiles.length + (allFiles.length === 1 ? " cours disponible" : " cours disponibles");
+        render();
+      })
+      .catch(function (err) {
+        showError(err);
+      });
+  }
+
+  function buildTree(items) {
+    root = { name: "", path: "", type: "folder", children: {} };
+    allFiles = [];
+    items.forEach(function (item) {
+      var parts = item.path.split("/");
+      var node = root;
+      for (var i = 0; i < parts.length - 1; i++) {
+        var part = parts[i];
+        var currentP = parts.slice(0, i + 1).join("/");
+        if (!node.children[part]) {
+          node.children[part] = { name: part, path: currentP, type: "folder", children: {} };
+        }
+        node = node.children[part];
+      }
+      var fileName = parts[parts.length - 1];
+      var displayName = fileName.replace(/\.html?$/i, "").replace(/[-_]+/g, " ");
+      var fileNode = { name: displayName, path: item.path, type: "file" };
+      node.children[fileName] = fileNode;
+      allFiles.push(fileNode);
+    });
+  }
+
+  function countFiles(node) {
+    var count = 0;
+    Object.keys(node.children).forEach(function (key) {
+      var child = node.children[key];
+      if (child.type === "file") count++;
+      else count += countFiles(child);
+    });
+    return count;
+  }
+
+  function getNode(pathParts) {
+    var node = root;
+    for (var i = 0; i < pathParts.length; i++) {
+      if (!node.children[pathParts[i]]) return null;
+      node = node.children[pathParts[i]];
+    }
+    return node;
+  }
+
+  // ---------- Errors ----------
+  function showError(err) {
+    var msg = "Impossible de charger le dépôt.";
+    if (err && err.kind === "notfound") {
+      msg = "Dépôt introuvable pour <strong>" + ctx.owner + "/" + ctx.repo + "</strong>. Vérifiez qu'il est public.";
+    } else if (err && err.kind === "ratelimit") {
+      msg = "Limite de requêtes GitHub atteinte. Réessayez dans quelques minutes.";
+    } else if (err && err.kind === "generic") {
+      msg = "Erreur réseau (code " + err.status + ").";
+    }
+    subLine.textContent = "Erreur de chargement";
+    contentEl.innerHTML = '<div class="error">' + msg + '<br><button class="retry-btn" id="retryBtn">Réessayer</button></div>';
+    var retryBtn = document.getElementById("retryBtn");
+    if (retryBtn) retryBtn.addEventListener("click", loadRepository);
+    crumbsEl.innerHTML = "";
+  }
+
+  // ---------- Specialty icons ----------
+  // Matched against a normalized (lowercase, accent-stripped) folder name.
+  // First match wins, so more specific patterns are listed before broader ones.
+  var SPECIALTY_ICONS = [
+    { match: /cardio/, icon: "🫀" },
+    { match: /neuro/, icon: "🧠" },
+    { match: /psychiat|sante mentale/, icon: "💭" },
+    { match: /pneumo|respirat|pulmon/, icon: "🫁" },
+    { match: /gastro|hepato|digesti/, icon: "🍽️" },
+    { match: /nephro|urolog|renal/, icon: "💧" },
+    { match: /hemato/, icon: "🩸" },
+    { match: /endocrin|thyroid|thyroide|diabet/, icon: "🦋" },
+    { match: /rhumato|articula/, icon: "🦵" },
+    { match: /orthoped|traumato/, icon: "🦴" },
+    { match: /dermato/, icon: "🧴" },
+    { match: /ophtalmo|ocul|vision/, icon: "👁️" },
+    { match: /\borl\b|oto.?rhino|laryngo/, icon: "👂" },
+    { match: /gyneco|obstetr/, icon: "🤰" },
+    { match: /pediatr|neonat/, icon: "🧒" },
+    { match: /infecti|microbio|virolog|parasito|mycolog|bacteriolog/, icon: "🦠" },
+    { match: /immuno|allerg/, icon: "🛡️" },
+    { match: /oncolog|cancero/, icon: "🎗️" },
+    { match: /chirurg|surger/, icon: "🔪" },
+    { match: /urgence|emergency|reanim|soins intensifs|soins critiques/, icon: "🚑" },
+    { match: /anesth/, icon: "😴" },
+    { match: /douleur|algolog|antalg/, icon: "🩹" },
+    { match: /palliati/, icon: "🕊️" },
+    { match: /radiolog|imagerie|imaging/, icon: "🩻" },
+    { match: /pharmac|medicament|therapeutique/, icon: "💊" },
+    { match: /toxicoman|addictolog/, icon: "🚭" },
+    { match: /toxicolog/, icon: "☠️" },
+    { match: /genetiq|genetic/, icon: "🧬" },
+    { match: /anatomopatholog|histopatholog|\bpatholog/, icon: "🔬" },
+    { match: /biolog/, icon: "🧫" },
+    { match: /anatom/, icon: "💀" },
+    { match: /physiolog/, icon: "⚙️" },
+    { match: /semiolog/, icon: "🩺" },
+    { match: /legale|forensic|ethique/, icon: "⚖️" },
+    { match: /sante publique|epidemio|prevention|biostatist/, icon: "📊" },
+    { match: /dentaire|odonto|stomatolog|maxillo.?facial/, icon: "🦷" },
+    { match: /nutrition/, icon: "🥗" },
+    { match: /geriatr|gerontolog/, icon: "👴" },
+    { match: /travail|occupation/, icon: "👷" },
+    { match: /\bsport/, icon: "🏃" },
+    { match: /reeducation|readaptation|kinesither|\bmpr\b/, icon: "🏋️" },
+    { match: /medecine generale|omnipratique/, icon: "🩺" }
+  ];
+  var DEFAULT_FOLDER_ICON = "📁";
+
+  function normalizeName(str) {
+    return String(str)
+      .toLowerCase()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // strip accents
+      .replace(/[-_]+/g, " ");
+  }
+
+  function iconForFolder(name) {
+    var norm = normalizeName(name);
+    for (var i = 0; i < SPECIALTY_ICONS.length; i++) {
+      if (SPECIALTY_ICONS[i].match.test(norm)) return SPECIALTY_ICONS[i].icon;
+    }
+    return DEFAULT_FOLDER_ICON;
+  }
+
+  // ---------- Rendering ----------
+
+  function renderCrumbs() {
+    crumbsEl.innerHTML = "";
+    var homeBtn = document.createElement("button");
+    homeBtn.textContent = "Accueil";
+    homeBtn.addEventListener("click", function () { currentPath = []; render(); });
+    crumbsEl.appendChild(homeBtn);
+    currentPath.forEach(function (part, idx) {
+      var sep = document.createElement("span");
+      sep.className = "sep";
+      sep.textContent = "/";
+      crumbsEl.appendChild(sep);
+      var btn = document.createElement("button");
+      btn.textContent = part;
+      var targetPath = currentPath.slice(0, idx + 1);
+      btn.addEventListener("click", function () { currentPath = targetPath; render(); });
+      crumbsEl.appendChild(btn);
+    });
+  }
+
+  function render() {
+    if (!loaded) return;
+    renderCrumbs();
+    var query = searchInput.value.trim();
+    if (query.length > 0) {
+      renderSearch(query);
+      return;
+    }
+    var node = getNode(currentPath);
+    if (!node) {
+      contentEl.innerHTML = '<div class="empty">Ce dossier n\'existe plus.</div>';
+      return;
+    }
+    var keys = Object.keys(node.children).sort(function (a, b) {
+      var na = node.children[a], nb = node.children[b];
+      if (na.type !== nb.type) return na.type === "folder" ? -1 : 1;
+      return a.localeCompare(b);
+    });
+
+    if (keys.length === 0) {
+      contentEl.innerHTML = currentPath.length === 0
+        ? '<div class="empty">Aucun cours pour le moment.<br>Ajoutez des fichiers .html dans le dépôt pour les voir apparaître ici.</div>'
+        : '<div class="empty">Ce dossier est vide.</div>';
+      return;
+    }
+
+    var label = currentPath.length === 0 ? "Catégories" : node.name;
+    var html = '<div class="section-label">' + escapeHtml(label) + '</div><div class="grid">';
+    keys.forEach(function (key) {
+      var child = node.children[key];
+      if (child.type === "folder") {
+        var count = countFiles(child);
+        html += '<div class="card folder" data-path="' + escapeAttr(child.path) + '" data-type="folder">' +
+          '<span class="ic">' + iconForFolder(child.name) + '</span>' +
+          '<span class="name">' + escapeHtml(child.name) + '</span>' +
+          '<span class="meta">' + count + (count === 1 ? " cours" : " cours") + '</span>' +
+          '</div>';
+      } else {
+        html += '<a class="card file" href="' + escapeAttr(child.path) + '" data-type="file">' +
+          '<span class="ic">📄</span>' +
+          '<span class="name">' + escapeHtml(child.name) + '</span>' +
+          '<span class="meta">Ouvrir</span>' +
+          '</a>';
+      }
+    });
+    html += "</div>";
+    contentEl.innerHTML = html;
+
+    Array.prototype.forEach.call(contentEl.querySelectorAll('.card.folder'), function (el) {
+      el.addEventListener("click", function () {
+        currentPath = el.getAttribute("data-path").split("/").filter(Boolean);
+        render();
+      });
+    });
+  }
+
+  function renderSearch(query) {
+    var q = query.toLowerCase();
+    var matches = allFiles.filter(function (f) {
+      return f.name.toLowerCase().indexOf(q) !== -1 || f.path.toLowerCase().indexOf(q) !== -1;
+    }).slice(0, 60);
+
+    if (matches.length === 0) {
+      contentEl.innerHTML = '<div class="empty">Aucun résultat pour « ' + escapeHtml(query) + ' ».</div>';
+      return;
+    }
+
+    var html = '<div class="section-label">' + matches.length + ' résultat' + (matches.length > 1 ? "s" : "") + '</div><div class="results-list">';
+    matches.forEach(function (f) {
+      var folderPath = f.path.split("/").slice(0, -1).join(" / ");
+      html += '<a class="result-item" href="' + escapeAttr(f.path) + '">' +
+        '<span class="ic">📄</span><span>' +
+        '<div class="rname">' + escapeHtml(f.name) + '</div>' +
+        (folderPath ? '<div class="rpath">' + escapeHtml(folderPath) + '</div>' : '') +
+        '</span></a>';
+    });
+    html += "</div>";
+    contentEl.innerHTML = html;
+  }
+
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function escapeAttr(str) { return escapeHtml(str); }
+
+  searchInput.addEventListener("input", function () { render(); });
+
+  loadRepository();
+
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("sw.js").catch(function () {
+        // PWA support is a progressive enhancement — the browser/directory
+        // just won't be installable or offline-capable if this fails.
+      });
+    });
+  }
+})();
+</script>
+
+</body>
+</html>

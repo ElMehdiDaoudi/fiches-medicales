@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sepsis — Fiche de révision</title>
+<style>
+  :root {
+    --pink: #F72585;
+    --purple: #7209B7;
+    --purple-dark: #3A0CA3;
+    --blue: #4361EE;
+    --cyan: #4CC9F0;
+
+    --pink-light: #FDE7F2;
+    --purple-light: #F0E6F7;
+    --purple-dark-light: #EAE7F7;
+    --blue-light: #E9EDFF;
+    --cyan-light: #E6F8FD;
+
+    --white: #FFFFFF;
+    --text: #211A2B;
+    --muted: #6B6470;
+    --border: #DDD9E2;
+    --background: #F7F6F9;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    background: var(--background);
+    color: var(--text);
+    line-height: 1.45;
+  }
+
+  .wrap { max-width: 820px; margin: 0 auto; padding: 0 1rem 3rem; }
+
+  header.page-head {
+    background: linear-gradient(135deg, var(--purple-dark), var(--purple));
+    color: #fff;
+    padding: 2rem 1.2rem 2.4rem;
+    margin: 0 -1rem 1.2rem;
+    border-radius: 0 0 20px 20px;
+  }
+  header.page-head .eyebrow { font-size: 0.82rem; opacity: 0.85; margin-bottom: 0.3rem; }
+  header.page-head h1 { margin: 0 0 0.35rem; font-size: clamp(1.7rem, 6vw, 2.4rem); }
+  header.page-head p.subtitle { margin: 0; opacity: 0.9; font-size: 1rem; }
+
+  section { margin-bottom: 1.4rem; }
+
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--purple-dark);
+    margin: 0 0 0.7rem;
+  }
+  .section-title.diag { color: var(--blue); }
+  .section-title.patho { color: var(--cyan); }
+  .section-title.tx { color: var(--purple); }
+  .section-title.alert { color: var(--pink); }
+
+  .card-box {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1rem 1.1rem;
+  }
+
+  .essentiel {
+    background: var(--purple-dark-light);
+    border-radius: 14px;
+    padding: 1rem 1.1rem;
+    border-left: 5px solid var(--purple-dark);
+  }
+  .essentiel ul { margin: 0.4rem 0 0; padding-left: 0; list-style: none; }
+  .essentiel li { margin: 0.3rem 0; padding-left: 1.3rem; position: relative; font-size: 0.95rem; }
+  .essentiel li::before { content: "→"; position: absolute; left: 0; color: var(--purple-dark); font-weight: 700; }
+
+  table.main-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+    background: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  table.main-table th {
+    background: var(--blue-light);
+    color: var(--purple-dark);
+    text-align: left;
+    padding: 0.55rem 0.7rem;
+    font-size: 0.82rem;
+  }
+  table.main-table td {
+    padding: 0.55rem 0.7rem;
+    border-top: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  .algo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    font-size: 0.92rem;
+    text-align: center;
+  }
+  .algo .step {
+    background: var(--blue-light);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.6rem 1rem;
+    font-weight: 600;
+    max-width: 320px;
+  }
+  .algo .step.urgent { background: var(--pink-light); color: var(--pink); }
+  .algo .arrow { color: var(--muted); font-size: 1.2rem; line-height: 1; margin: 0.1rem 0; }
+  .algo .branch {
+    display: flex;
+    gap: 1.2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  .algo .branch .col { display: flex; flex-direction: column; align-items: center; gap: 0.2rem; }
+  .algo .branch .label { font-size: 0.78rem; color: var(--muted); font-weight: 700; }
+
+  .grid-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.7rem;
+  }
+  .mini-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.8rem 0.9rem;
+  }
+  .mini-card .mini-title { font-weight: 700; font-size: 0.88rem; margin-bottom: 0.35rem; color: var(--purple-dark); }
+  .mini-card ul { margin: 0; padding-left: 1.1rem; font-size: 0.88rem; }
+
+  .redflags {
+    background: var(--pink-light);
+    border-left: 5px solid var(--pink);
+    border-radius: 14px;
+    padding: 1rem 1.1rem;
+  }
+  .redflags ul { margin: 0.3rem 0 0; padding-left: 0; list-style: none; }
+  .redflags li { margin: 0.3rem 0; padding-left: 1.3rem; position: relative; font-size: 0.94rem; }
+  .redflags li::before { content: "🚨"; position: absolute; left: 0; }
+
+  .traps .trap-item {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.65rem 0.85rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+  }
+  .traps .wrong { color: var(--pink); font-weight: 600; }
+  .traps .right { color: var(--purple-dark); }
+
+  .numbers {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.6rem;
+  }
+  .number-card {
+    background: var(--cyan-light);
+    border-radius: 12px;
+    padding: 0.7rem 0.8rem;
+    text-align: center;
+  }
+  .number-card .val { font-size: 1.3rem; font-weight: 800; color: var(--purple-dark); }
+  .number-card .lbl { font-size: 0.78rem; color: var(--muted); margin-top: 0.15rem; }
+
+  .tx-steps { counter-reset: tx; padding: 0; list-style: none; margin: 0; }
+  .tx-steps li {
+    counter-increment: tx;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--purple);
+    border-radius: 10px;
+    padding: 0.7rem 0.9rem 0.7rem 2.4rem;
+    margin-bottom: 0.55rem;
+    position: relative;
+    font-size: 0.92rem;
+  }
+  .tx-steps li::before {
+    content: counter(tx);
+    position: absolute;
+    left: 0.7rem;
+    top: 0.65rem;
+    background: var(--purple);
+    color: #fff;
+    width: 1.3rem;
+    height: 1.3rem;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+  }
+  .placeholder-note { font-size: 0.82rem; color: var(--muted); font-style: italic; }
+
+  .keymsg { background: var(--purple-dark-light); border-radius: 14px; padding: 1rem 1.1rem; }
+  .keymsg ol { margin: 0.3rem 0 0; padding-left: 1.2rem; font-size: 0.94rem; }
+  .keymsg li { margin: 0.3rem 0; }
+
+  @media (max-width: 480px) {
+    .algo .branch { gap: 0.7rem; }
+    .algo .branch .col { flex: 1; min-width: 120px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="page-head">
+    <div class="eyebrow">Urgences / Réanimation</div>
+    <h1>SEPSIS</h1>
+    <p class="subtitle">Reconnaissance rapide + prise en charge initiale — fiche modèle</p>
+  </header>
+
+  <p class="placeholder-note">Fiche d'exemple destinée à illustrer le gabarit visuel. Les seuils qSOFA cités sont des critères publiés et largement reconnus ; les éléments marqués « [protocole local] » sont des emplacements à compléter avec les données exactes de votre source (posologies, protocoles), qui ne doivent jamais être inventées.</p>
+
+  <section>
+    <div class="section-title">🧠 ESSENTIEL</div>
+    <div class="essentiel">
+      <ul>
+        <li>Le sepsis est une dysfonction d'organe menaçant le pronostic vital, causée par une réponse dérégulée de l'hôte à une infection.</li>
+        <li>Le choc septique est un sous-groupe du sepsis avec anomalies circulatoires/métaboliques sévères.</li>
+        <li>Le qSOFA (au lit du malade) aide au repérage rapide en dehors de la réanimation.</li>
+        <li>La prise en charge initiale est une course contre la montre : reconnaissance → bilan → traitement précoce.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-title diag">📋 VUE D'ENSEMBLE</div>
+    <div class="table-scroll">
+      <table class="main-table">
+        <tr><th>Élément</th><th>Caractéristiques</th><th>Points clés</th></tr>
+        <tr><td>Définition</td><td>Dysfonction d'organe liée à une réponse infectieuse dérégulée</td><td>Pas une simple infection ou une fièvre isolée</td></tr>
+        <tr><td>Repérage rapide</td><td>Score qSOFA au lit du malade</td><td>≥ 2 critères → risque accru, à confirmer</td></tr>
+        <tr><td>Confirmation</td><td>Contexte infectieux + dysfonction d'organe</td><td>Score SOFA en milieu spécialisé</td></tr>
+        <tr><td>Choc septique</td><td>Sepsis + besoin de vasopresseurs + hyperlactatémie</td><td>Sous-groupe de gravité supérieure</td></tr>
+        <tr><td>Prise en charge</td><td>Reconnaissance, bilan, traitement précoce</td><td>Chaque heure de retard aggrave le pronostic</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-title alert">⚡ RECONNAÎTRE RAPIDEMENT</div>
+    <div class="grid-cards">
+      <div class="mini-card">
+        <div class="mini-title">Suspecter si</div>
+        <ul>
+          <li>Contexte infectieux évocateur</li>
+          <li>Altération de l'état général brutale</li>
+          <li>Signes cliniques inhabituels chez un patient infecté</li>
+        </ul>
+      </div>
+      <div class="mini-card">
+        <div class="mini-title">🔎 qSOFA — critères</div>
+        <ul>
+          <li>Fréquence respiratoire ≥ 22/min</li>
+          <li>Altération de la conscience</li>
+          <li>Pression artérielle systolique ≤ 100 mmHg</li>
+        </ul>
+      </div>
+      <div class="mini-card">
+        <div class="mini-title">🚨 Gravité si</div>
+        <ul>
+          <li>qSOFA ≥ 2</li>
+          <li>Hypotension persistante malgré remplissage</li>
+          <li>Hyperlactatémie</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-title patho">🧬 ALGORITHME DE PRISE EN CHARGE</div>
+    <div class="card-box">
+      <div class="algo">
+        <div class="step">SUSPICION D'INFECTION</div>
+        <div class="arrow">↓</div>
+        <div class="step">ÉVALUATION QSOFA</div>
+        <div class="arrow">↓</div>
+        <div class="step urgent">QSOFA ≥ 2 ?</div>
+        <div class="arrow">↓</div>
+        <div class="branch">
+          <div class="col">
+            <div class="label">OUI</div>
+            <div class="step urgent">PRISE EN CHARGE URGENTE<br>+ bilan de gravité (lactates, SOFA)</div>
+          </div>
+          <div class="col">
+            <div class="label">NON</div>
+            <div class="step">SURVEILLANCE RAPPROCHÉE<br>+ réévaluation</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-title alert">🚨 RED FLAGS</div>
+    <div class="redflags">
+      <ul>
+        <li>Hypotension réfractaire au remplissage vasculaire</li>
+        <li>Marbrures, extrémités froides, altération de la conscience</li>
+        <li>Élévation des lactates</li>
+        <li>Diurèse effondrée</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="traps">
+    <div class="section-title alert">⚠️ PIÈGES À ÉVITER</div>
+    <div class="trap-item"><span class="wrong">❌ Écarter le sepsis en l'absence de fièvre</span><br><span class="right">→ Une hypothermie ou une normothermie n'excluent pas le diagnostic.</span></div>
+    <div class="trap-item"><span class="wrong">❌ Attendre la confirmation biologique avant tout traitement</span><br><span class="right">→ Le traitement précoce ne doit pas être retardé par les examens complémentaires.</span></div>
+  </section>
+
+  <section>
+    <div class="section-title tx">💊 TRAITEMENT — PRINCIPES GÉNÉRAUX</div>
+    <ol class="tx-steps">
+      <li>Mesures initiales : oxygénation, voie veineuse, remplissage vasculaire selon [protocole local]</li>
+      <li>Traitement de la cause infectieuse : antibiothérapie précoce selon [protocole local / écologie locale]</li>
+      <li>Si instabilité persistante : recours aux vasopresseurs en réanimation</li>
+      <li>Surveillance : constantes, diurèse, lactates, réévaluation régulière</li>
+    </ol>
+    <p class="placeholder-note">Les posologies et molécules doivent être complétées à partir d'un protocole ou d'une source de référence — jamais inventées.</p>
+  </section>
+
+  <section>
+    <div class="section-title diag">🔢 CHIFFRES CLÉS</div>
+    <div class="numbers">
+      <div class="number-card"><div class="val">≥ 22/min</div><div class="lbl">FR — critère qSOFA</div></div>
+      <div class="number-card"><div class="val">≤ 100 mmHg</div><div class="lbl">PAS — critère qSOFA</div></div>
+      <div class="number-card"><div class="val">≥ 2</div><div class="lbl">qSOFA — seuil d'alerte</div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-title">🧠 KEY MESSAGES</div>
+    <div class="keymsg">
+      <ol>
+        <li>Penser au sepsis devant toute altération inexpliquée chez un patient à risque infectieux.</li>
+        <li>Le qSOFA est un outil de repérage, pas un outil diagnostique de certitude.</li>
+        <li>Chaque heure de retard au traitement dégrade le pronostic.</li>
+        <li>Ne jamais attendre la confirmation biologique pour débuter la prise en charge.</li>
+      </ol>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>
